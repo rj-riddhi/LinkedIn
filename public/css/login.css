@@ -1,0 +1,67 @@
+.modal{
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    padding-bottom: 20px;
+	max-width: 50%;
+}
+.h1{
+
+	text-align: left;
+	color :#4F4F4F;
+	font-size: 2.25rem;
+	font-weight: bold;
+	margin-bottom: 0.56rem;
+	margin-top: 2rem;
+	font-family: 'Roboto', sans-serif;
+}
+.p,.span{
+    color: black;
+}
+.user {
+
+    background:url("../images/Login/user.png") right no-repeat;
+    background-origin: content-box;
+    text-indent: 25px;
+    cursor: pointer;
+}
+.lock {
+
+    background:url("../images/Login/lock.png") right no-repeat;
+    background-origin: content-box;
+    text-indent: 25px;
+    cursor: pointer;
+}
+.modal-dialog {
+     position: relative;
+     width: auto;
+     margin: 0 auto;
+     box-shadow: 2px 0 5.5px 0.5px rgba(0, 0, 0, 0.1);
+     
+ }
+ @media only screen and (max-width: 780px) {
+     .modal-dialog {
+         position: relative
+     }
+ }
+
+ @media only screen and (max-width: 580px) {
+     .modal-dialog {
+         position: relative
+     }
+ }
+
+ #LoginModal .btn,#ForgotModal .btn{
+ 	margin-top: 5px;
+     width: 100% !important;
+    font-weight: bold;
+    background-color: rgb(52, 109, 117);
+     border-radius: 40px;
+     color: white;
+     text-align: center;
+ }
+ 
+
+ 
+
+
