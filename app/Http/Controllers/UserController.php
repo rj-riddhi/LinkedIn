@@ -24,10 +24,20 @@ class UserController extends Controller
 		  'usersEmail' => $decode['email'],
 		  'phone'=>$decode['phone'],
 		  'usersPwd' => $decode['pass'],
+		  'usertype' => $decode['usertype'],
 		  'pwdRepeat' => $decode['confirmpass'],
-		  'tech'=>$decode['arr']
+		  'tech'=>$decode['arr'],
+		  'date'=>$decode['date']
 		];
 		
+		if($data['usertype'] == 'Admin')
+		{
+			$usertype = '1';
+		}
+		else
+		{
+			$usertype = '0';
+		}
 		$result = Usermodel::where('email',$data['usersEmail'])->get();
 		if($result == false)
 		{
@@ -41,14 +51,18 @@ class UserController extends Controller
 	  $user = new Usermodel;
 	  $user->name = $data['usersFirstName'].' '.$data['usersLastName'];
 	  $user->email = $data['usersEmail'];
+	  $user->phone = $data['phone'];
 	  $user->password = $data['usersPwd'];
+	  $user->role = $usertype;
 	  $user->technologies = $data['tech'];
 	  $user->profile_photo_path = $data['profile'];
+	  $user->created_at = $data['date'];
 	  $result2 = $user->save();
 	 if($result2 == true)
 	  {
 		  $id = Usermodel::where('email',$data['usersEmail'])->get();
 		  session()->put("UserName",$user->name);
+		  session()->put("role",$usertype);
 		  
 		  $sessiondata = array("name"=>$user->name,"id"=>$id[0]->id);
 		//  Sending mail 
@@ -93,16 +107,25 @@ class UserController extends Controller
 
 	public function UserLogin(Request $req){
         $sessiondata =  $req->input();
-
+        if($sessiondata['user_type'] == 'Admin')
+		{
+			$usertype = '1';
+		}
+		else
+		{
+			$usertype = '0';
+		}
         //Init data
         $data=[
             'Email' => $sessiondata['Email'],
             'usersPwd' =>  $sessiondata['password'],
+			'usertype' => $usertype
         ];
 
        //Check for user/email
-		$result = Usermodel::where('email',$data['Email'])->get();
-		// echo $result;exit;
+		$result = Usermodel::where('email',$data['Email'])
+		                   ->where('role',$data['usertype'])
+						   ->get();
 		if(count($result)>0){
             //User Found
 			$loggedInUser = password_verify($data['usersPwd'], $result[0]['password']);
@@ -113,9 +136,11 @@ class UserController extends Controller
 				$req->session()->put('UsersName', $result[0]['name']);
 				$req->session()->put('Id', $result[0]['id']);
 				$req->session()->put('email',  $data['Email']);
-				return redirect('/welcome/'.session("UsersName"));
+				$req->session()->put('role',$data['usertype']);
+				return redirect('/');
+				
             }else {
-				$html =  "Password Incorrect";
+				$html =  "Password Incorrect ";
 				return view("/userlogin",['error'=>$html,'Email'=>$data['Email']]);
             }
 		}
@@ -143,7 +168,9 @@ class UserController extends Controller
     public static function getUsers($id)
     {
 		
-    	$data =  Usermodel::where('id','!=',$id)->get();
+    	$data =  Usermodel::where('id','!=',$id)
+		                   ->where('role','!=','1')
+						   ->get();
 		return ($data);
     }
 	public static function getUserId($name)

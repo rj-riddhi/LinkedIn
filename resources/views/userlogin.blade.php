@@ -42,7 +42,14 @@
 									<div class="form-group col-12">
 										<input type="password" name="password" class="form-control  lock" placeholder="Password"required>
 									</div>
-									<div class="form-group col">
+									<div class="form-group col-md-6 ">
+										<select class="form-control" name="user_type" id="user_type">
+												<option value="Type">Type</option>
+												<option value="Admin">Admin</option>
+												<option value="User">User</option>
+										</select>
+									</div>
+									<div class="form-group col-md-12">
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" value=""required>
 											<label class="form-check-label ml-2">

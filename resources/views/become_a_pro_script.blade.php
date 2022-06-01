@@ -88,24 +88,43 @@ $(document).on("change","#profileImage",(e)=>{
       image.src = "images/Profiles/"+data;
       })
  
-})
+});
+
+function userType(value)
+{
+    if(value == 'Admin')
+    {
+      var ele = document.getElementsByClassName('tech');
+      for(var i = 0 ; i<ele.length ; i++)
+      {
+        ele[i].disabled = true;
+      }
+    }
+}
+
 $(document).on("click","#custregisterbtn",(e)=>{
-  e.preventDefault();
+  
+  let currentDate = new Date();
+  let datearr = currentDate.toLocaleDateString().split("/");
+    let date = datearr[2] + "-" + datearr[0]+ "-" + datearr[1];
+  
   var profile = document.getElementById("avtarimg").src;
+  if(profile == "https://cdn2.iconfinder.com/data/icons/user-people-4/48/5-512.png"){
+    show_msg("error","Please set your profile Image");
+    $("#avtarimg").focus();
+    return false;
+  }
   profile = profile.split("Profiles/")[1];
   var firstname = document.getElementById('inputFirstName').value;
   var lastname = document.getElementById('inputLastName').value;
   var email = document.getElementById('email').value;
   var phone = document.getElementById('phone1').value;
   var pass = document.getElementById('password1').value;
+  var user_type = document.getElementById("user_type").value;
+  
   var confirmpass = document.getElementById('password2').value;
   var termsCheckBox = document.getElementById('invalidCheck2');
-
-  if(profile == "https://cdn2.iconfinder.com/data/icons/user-people-4/48/5-512.png"){
-    show_msg("error","Please set your profile Image");
-    $("#avtarimg").focus();
-    return false;
-  }
+  
   
   if(firstname==""){
     show_msg("error","Please fill FirstName");
@@ -163,6 +182,12 @@ $(document).on("click","#custregisterbtn",(e)=>{
     $("#password2").focus();
     return false;
   }
+if(user_type == 'Type')
+{
+  show_msg("error","Select User Type ");
+    $("#user_type").focus();
+    return false;
+}
   if(termsCheckBox.checked != true){
     show_msg('error' , '✔ Please accept terms & Conditions ');
     $("#invalidCheck2").focus();
@@ -185,7 +210,6 @@ $(document).on("click","#custregisterbtn",(e)=>{
     return false;
   }
  
- 
   var formdata = {
     'profile' : profile,
     'firstname' : firstname,
@@ -193,8 +217,10 @@ $(document).on("click","#custregisterbtn",(e)=>{
     'email' : email,
     'phone' : phone,
     'pass' : pass,
+    'usertype' : user_type,
     'confirmpass' : confirmpass,
-    'arr' : arr2
+    'arr' : arr2,
+    'date' : date
   };
   var jsondata = JSON.stringify(formdata);
  document.getElementById('custregisterbtn').innerHTML = "Loading....";

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,9 @@ Route::POST("/uploadVideoFile",[UserController::class,"uploadVideoFile"]);
 // {
 //     include public_path().'server.js';
 // });
+
+
+// Admin routs
+Route::POST('/getUserData',[AdminController::class,'getUserData']);
+
 

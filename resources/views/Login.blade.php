@@ -80,12 +80,19 @@ session_start();
 							<div class="form-group col-md-6">
 								<input type="password"  name="pwdRepeat" class="form-control" id="password2" placeholder="Confirm Password" required>
 							</div>
-                            <div class="container">
+							<div class="form-group col-md-6 ">
+							<select class="form-control" name="user_type" id="user_type" onchange="userType(this.value)">
+									<option value="Type">Type</option>
+									<option value="Admin">Admin</option>
+									<option value="User">User</option>
+							</select>
+							</div>
+                            <div class="container " >
 								<div class="form-group row " id="myForm">
-                                        <input type="text"  class="form-control col-md-3" />
+                                        <input type="text"  class="form-control col-md-3 tech" />
                                     </div>
 							</div>
-                            <input type="button" id="addTech" value="Add "  class="btn sub_btn  btn-rounded "/>
+                            <input type="button" id="addTech" value="Add "  class="btn sub_btn  btn-rounded tech"/>
 </div>
 
                             <div class="form-group col">

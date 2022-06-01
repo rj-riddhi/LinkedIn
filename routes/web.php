@@ -18,7 +18,15 @@ use App\Http\Controllers\MailController;
 Route::get('/', function () {
     if((session()->get('UsersName')))
     {
-        return redirect('/welcome/'.session("UsersName"));
+        
+        if(session()->get('role') != '1')
+        {
+            return redirect('/welcome/'.session("UsersName"));
+        }
+        else
+        {
+            return redirect('/dashboard/'.session("UsersName"));
+        }
     }
     else
     {
@@ -26,26 +34,20 @@ Route::get('/', function () {
     }
 });
 Route::view('/Login','Login');
+
 Route::get('/logout',[UserController::class,"logout"]);
 Route::view('/userlogin','userlogin');
 Route::view('/ForgotModal','ForgotPassword');
 Route::get('/welcome/{data}',function ($data) {
     return view('welcome',['name'=>$data]);
 });
+
 Route::post("/UserLogin",[UserController::class,"UserLogin"]);
 
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified'
-// ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     });
-    // ->name('dashboard');
-    
-    
-// });
+ 
 Route::get("/dashboard/users",[UserController::class,"getUsers"]);
 Route::get('/connections/{data}',function($data){
     return view('connections',['name'=>$data]);
@@ -62,7 +64,17 @@ Route::get('mail/{email}', [MailController::class,"index"]);
 // Route for store msg
 Route::get("/storeMessage/{data}",[UserController::class,"storeMessage"]);
 
-// Route::POST('/request', function()
-// {
-//     include public_path().'server.js';
-// });
+
+// Admin routs
+
+Route::get('/dashboard/{data}',function ($data) {
+    return view('admin',['name'=>$data]);
+});
+
+Route::get('/Activity',function () { 
+    return view('activity_admin',['name'=>session("UsersName")]);
+});
+Route::get('/Dashboard',function () {
+   return view('admin',['name'=>session("UsersName")]);
+});
+
