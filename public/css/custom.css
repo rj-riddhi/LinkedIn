@@ -46,7 +46,7 @@ button{
 .exportbtn{
     background-color: #1D7A8C;
     padding: 7px 15px 8px 16px;
-	color: white;
+	color: white !important;
    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%); 
     border:none !important;
     border-radius: 6px;
@@ -54,7 +54,7 @@ button{
 .exportbtn:hover{
     background-color: white;
     padding: 7px 15px 8px 16px;
-	color: #1D7A8C;
+	color: #1D7A8C !important;
    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%); 
     border:none;
 }

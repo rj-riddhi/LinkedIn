@@ -1,5 +1,8 @@
 <script>
-    
+    document.getElementById("dashli").classList.add("active");
+    document.getElementById("chartli").classList.remove("active");
+    document.getElementById("actli").classList.remove("active");
+    document.getElementById("calli").classList.remove("active");
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
@@ -39,6 +42,8 @@
             })
             
         }
+
+       
 
 
 

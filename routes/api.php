@@ -46,4 +46,5 @@ Route::POST("/uploadVideoFile",[UserController::class,"uploadVideoFile"]);
 // Admin routs
 Route::POST('/getUserData',[AdminController::class,'getUserData']);
 
-
+Route::POST('/export', [AdminController::class, 'export']);
+Route::get('/export', [AdminController::class, 'export']);

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Arr;
 use App\Models\Usermodel;
 use App\Models\Connection;
 use App\Models\Message;
+use App\Models\Admin_notification;
 use Illuminate\Support\Facades\DB;
 use App\Http\helpers;
 use App\Http\Controllers\MailController;
@@ -13,6 +15,8 @@ use App\Http\Controllers\MailController;
 
 class UserController extends Controller
 {
+	// public $notification = array() ;
+	// public $notification = [];
 	public function LoginUser(Request $req)
 	{
 		$input = file_get_contents('php://input');
@@ -69,7 +73,12 @@ class UserController extends Controller
 		  $mailresult = MailController::index($user->email);
 		if($mailresult)
 		{
+			$notification = new Admin_notification;
+			$notification->notification = $user->name." Joined LinkedIn";
+			$notification->time = $data['date'];
+			$notification->save();
 		 return json_encode(array("insert"=>"success","data"=>$sessiondata));
+
 		}
 	}
 	
@@ -137,7 +146,15 @@ class UserController extends Controller
 				$req->session()->put('Id', $result[0]['id']);
 				$req->session()->put('email',  $data['Email']);
 				$req->session()->put('role',$data['usertype']);
+
+				date_default_timezone_set('Asia/Kolkata');
+		        $date =  date('Y-m-d H:i:s');
+				$notification = new Admin_notification;
+			$notification->notification = session()->get('UsersName')." is Online";
+			$notification->time = $date;
+			$notification->save();
 				return redirect('/');
+				
 				
             }else {
 				$html =  "Password Incorrect ";
@@ -157,9 +174,17 @@ class UserController extends Controller
 		$date =  date('Y-m-d H:i:s');
 		Usermodel::where('email',session()->get('email'))
 		   ->update(['Status'=>'0','updated_at'=>$date]);
-						
+			
+		   
+		   $notification = new Admin_notification;
+			$notification->notification = session()->get('UsersName')." is Offline";
+			$notification->time = $date;
+			$notification->save();
 		   session()->flush();
-    	return redirect("/userlogin");
+
+
+		   
+		 return redirect("/userlogin");
    
 }
 
@@ -284,6 +309,15 @@ class UserController extends Controller
 		$input = file_get_contents('php://input');
 		$decode = json_decode($input,true);
 		$name = $decode['name'];
+
+		
+		date_default_timezone_set('Asia/Kolkata');
+		$date =  date('Y-m-d H:i:s');
+		$notification = new Admin_notification;
+			$notification->notification = $name." start chatting";
+			$notification->time = $date;
+			$notification->save();
+		
 		return redirect('index.html')->with('name', $name);
 	}
 
@@ -353,7 +387,7 @@ class UserController extends Controller
 			return json_encode(array("messages"=>$Messages));
 		}
 		}
-
+		
 
 	
 }

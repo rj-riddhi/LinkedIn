@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Usermodel;
 use App\Models\Connection;
 use App\Models\Message;
+use App\Models\Admin_notification;
+
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\UserController;
 
 class AdminController extends Controller
 {
@@ -86,5 +92,58 @@ class AdminController extends Controller
     {
         $result = Message::select('Receiver')->distinct()->where('Sender',$id)->get();
         return $result;
+    }
+
+    public function export() 
+    {
+          return Excel::download(new UsersExport, 'invoices.xlsx');
+    }
+
+    public function plotChart()
+    {
+
+    $record = Usermodel::select(\DB::raw("COUNT(*) as count"), \DB::raw("DAYNAME(created_at) as day_name"), \DB::raw("MONTHNAME(created_at) as day"))
+    ->groupBy('day_name','day')
+    ->orderBy('day')
+    ->get();
+ 
+     $data = [];
+
+     foreach($record as $row) {
+        $data['label'][] = $row->day;
+        $data['tooltip'][] = $row->day_name;
+        $data['data'][] = (int) $row->count;
+      }
+
+    $data['chart_data'] = json_encode($data);
+    return view('charts', $data);
+    }
+
+    public function chatLogs(){
+        $totalUsers = $this->getUsers();
+        $onlineUsers = Usermodel::where("Status","1")
+                                ->where("role",'0')
+                                ->get();
+        $totalRequests = $this->getTotalRequests();
+        $connected = $this->getTotalConnections();
+        $pending = Connection::where("Status","Pending")
+                              ->get();
+        $totalChats = $this->getTotalChats();
+
+     $data = [];
+
+         $data['label'] = ['TotalUsers','OnlineUsers','TotalRequests','Connected','Pending','Chattings'];
+         $data['data'] = [count($totalUsers),count($onlineUsers),count($totalRequests),count($connected),count($pending),count($totalChats)];
+    
+    
+        $data['bar_data'] = json_encode($data);
+        return $data;
+    
+    }
+
+    public static function activities()
+    {
+        $result = Admin_notification::all();
+        return json_encode(array('array'=>$result));
     }
 }

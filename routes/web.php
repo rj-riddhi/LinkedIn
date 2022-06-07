@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,4 +78,12 @@ Route::get('/Activity',function () {
 Route::get('/Dashboard',function () {
    return view('admin',['name'=>session("UsersName")]);
 });
+
+Route::get('export',[AdminController::class, 'export'])->name('student.export');
+
+Route::get('/charts',[AdminController::class,'plotChart']);
+
+Route::get('/chatLogs',[AdminController::class,'chatLogs']);
+
+Route::get('/activities',[AdminController::class,'activities']);
 
