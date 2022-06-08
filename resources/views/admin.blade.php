@@ -107,10 +107,11 @@
                                             <th>Phone</th>
                                             <th>Technology</th>
                                             <th>Profile</th>
+                                            <th>Action</th>
                                         </tr></thead>
                                         <tbody>
                                             @foreach($users as $arr)
-                                            <tr id={{$arr->id}} onclick="getInfo(this.id)">
+                                            <tr id="{{$arr->id}}" onclick="getInfo(this.id)">
                                                 <td>{{$arr->id}}</td>
                                                 <td>{{$arr->name}}</td>
                                                 <td>{{$arr->email}}</td>
@@ -122,6 +123,7 @@
                                                     @endforeach
                                                 </td>
                                                 <td><img class="profile"  src="http://localhost:8000/images/Profiles/{{$arr->profile_photo_path}}"/> </td>
+                                                <td> <div class="badge_edit" id="{{$arr->name}}" onclick="edit(this.id)"> Edit </div></td>
                                             </tr>
                                             @endforeach
                                             
@@ -134,6 +136,7 @@
                     </div>
 					
 					
+
 						
 		<!-- <footer class="footer">
                 <div class="container-fluid">
@@ -180,6 +183,55 @@
 
         </div>
     </div>
+
+
+    <!-- The Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="model-heading"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+      <div class="form-row">
+
+            <div class="form-group col-md-12 text-center d-flex" id="form">
+              <img  id="avtarimg"/>
+              <span class="material-icons" id="add_circle" onclick="addImage()">add_circle</span>
+            </div>
+            
+            <input type="file" name="profileImage" class="form-control" id="profileImage" accept="image/*"  required>
+        </div>
+
+         <h3>Address List</h3>
+
+        <div class="form-row">
+            
+            <div class="input-group mb-2 col-md-12 text-center" >
+                <input class="form-control" type="text" placeholder="address line 1..."/>
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><span class="material-icons address_add" id="1_add" onclick="addressadd(this)">add_circle</span></div>
+                </div>
+            </div>
+
+            
+           
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
 @include('jsLinks');
