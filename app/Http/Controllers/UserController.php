@@ -15,24 +15,37 @@ use App\Http\Controllers\MailController;
 
 class UserController extends Controller
 {
-	// public $notification = array() ;
-	// public $notification = [];
 	public function LoginUser(Request $req)
 	{
 		$input = file_get_contents('php://input');
 		$decode = json_decode($input,true);
+		
+    	$req->validate([
+    		// 'profile'=>'Required | mimes:jpg,bmp,png,jpeg',
+    		'usersFirstName'=>'Required',
+    		'usersLastName'=>'Required',
+			'email'=>'Required | email | unique:userslogin2',
+    		'phone'=>'Required | max:10 | min:10',
+		    'password'=>'Required',
+			'role'=>'Required',
+			'pwdRepeat'=>'required_with:password|same:password|min:6',
+			'technologies'=>'Required ',
+		
+	]);
+		
 		$data = [
-		  'profile' => $decode['profile'],
-		  'usersFirstName' => $decode['firstname'],
-		  'usersLastName' => $decode['lastname'],
-		  'usersEmail' => $decode['email'],
-		  'phone'=>$decode['phone'],
-		  'usersPwd' => $decode['pass'],
-		  'usertype' => $decode['usertype'],
-		  'pwdRepeat' => $decode['confirmpass'],
-		  'tech'=>$decode['arr'],
-		  'date'=>$decode['date']
+		  'profile' => $req->profile,
+		  'usersFirstName' => $req->firstname,
+		  'usersLastName' => $req->lastname,
+		  'usersEmail' => $req->email,
+		  'phone'=>$req->phone,
+		  'usersPwd' => $req->pass,
+		  'usertype' => $req->usertype,
+		  'pwdRepeat' => $req->confirmpass,
+		  'tech'=>$req->arr,
+		  'date'=>$req->date
 		];
+		
 		
 		if($data['usertype'] == 'Admin')
 		{
@@ -115,8 +128,8 @@ class UserController extends Controller
 
 
 	public function UserLogin(Request $req){
-        $sessiondata =  $req->input();
-        if($sessiondata['user_type'] == 'Admin')
+		$sessiondata =  $req->input();
+		if($sessiondata['user_type'] == 'Admin')
 		{
 			$usertype = '1';
 		}
@@ -130,6 +143,7 @@ class UserController extends Controller
             'usersPwd' =>  $sessiondata['password'],
 			'usertype' => $usertype
         ];
+		
 
        //Check for user/email
 		$result = Usermodel::where('email',$data['Email'])

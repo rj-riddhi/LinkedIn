@@ -45,7 +45,7 @@ Route::get('/welcome/{data}',function ($data) {
 
 Route::post("/UserLogin",[UserController::class,"UserLogin"]);
 
-    Route::get('/dashboard', function () {
+Route::get('/dashboard', function () {
         return view('dashboard');
     });
  
