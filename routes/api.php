@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,11 @@ Route::POST("/uploadVideoFile",[UserController::class,"uploadVideoFile"]);
 //     include public_path().'server.js';
 // });
 
+
+
+// // Route for messages
+// Route::POST("/getMessageStatus",[MessageController::class,"getMessageStatus"]);
+// Route::POST("/insertMsgToDatabase",[MessageController::class,"insertMsgToDatabase"]);
 
 // Admin routs
 Route::POST('/getUserData',[AdminController::class,'getUserData']);

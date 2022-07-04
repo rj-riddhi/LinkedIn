@@ -37,7 +37,7 @@ fetch("/api/getProfile",{
       })
 .then((response)=>response.text())
 .then((data)=>{
-    document.getElementById("dpImage").setAttribute("src",getBaseURL()+"/images/Profiles/"+data);
+    document.getElementById("dpImage").setAttribute("src","/images/Profiles/"+data);
     document.getElementById("receiverName").innerHTML = receivername;
 })
 .catch((error)=>{
@@ -98,14 +98,14 @@ document.querySelector(".links").innerHTML += dashboardlink;
     });
 }
 
-// const socket = io.connect('localhost:8000'); 
+// const socket = io.connect('localhost:3000'); 
 
 var baseURL               = getBaseURL(); // Call function to determine it
 var socketIOLocation      = baseURL  // Build Socket.IO location
 const socket                = io.connect(socketIOLocation);
 function getBaseURL()
 {
-    baseURL = location.protocol + "//" + location.hostname + ":" + location.port;
+    baseURL = location.protocol + "//" + location.hostname + ":" + 3000;
     return baseURL;
 }
 let textarea = document.querySelector('#textarea');
@@ -413,7 +413,7 @@ formData.append( 'receiverId', receiverId );
 formData.append('time',time);
       
         $.ajax({
-            url:  '/uploadImages',
+            url:  getBaseURL()+'/uploadImages',
             type: "POST",
             data: formData,
             dataType: "json",
@@ -483,7 +483,7 @@ async function sendDocument( value ){
   formData.append( 'receiverId', receiverId );
   formData.append('time',time);
   $.ajax({
-      url:  '/uploadDocument',
+      url:  getBaseURL()+'/uploadDocument',
       type: "POST",
       data: formData,
       dataType: "json",
@@ -669,7 +669,7 @@ formData.append( 'senderId', senderId);
 formData.append( 'receiverId', receiverId);
 formData.append('time',time);
 $.ajax({
-  url:  '/uploadVideoFile',
+  url:  getBaseURL()+'/uploadVideoFile',
   type: "POST",
   data: formData,
   success: function(data) {
@@ -865,8 +865,31 @@ function loadMessages(senderId,receiverId)
        
            }
            
-               appendMessage2(data,'outgoing');
+               appendMessage2(data,'incoming');
                 }
+
+                else if(messages[i].Messages.includes(".jpeg") || messages[i].Messages.includes(".jpg") ||messages[i].Messages.includes(".svg") || messages[i].Messages.includes(".png"))
+                {
+                    var imgContent = `
+                    <img src='/images/ChatImage/${messages[i].Messages}' class='image'></img> `;
+
+                    var time = messages[i].created_at.split('T')[1];
+                time = time.substring(0,5);
+           let data = {
+               user : name2,
+               senderId : messages[i].Sender,
+               message: imgContent,
+               receiverId : messages[i].Receiver,
+               time : time,
+               msgstatus : messages[i].Message_Read,
+               notifications :messages[i].Notifications,
+               _token : csrf,
+       
+           }
+           
+               appendMessage2(data,'incoming');
+                }
+
                 else
                 {
                 var time = messages[i].created_at.split('T')[1];
@@ -959,60 +982,14 @@ function loadMessages(senderId,receiverId)
             tickmarkLogic(type,msgstatus,markup,mainDiv);
         }
 }
-
-
-// Change User status
-// document.addEventListener("visibilitychange", (event) => {
-//         if (document.visibilityState == "visible") {
-//            //  Set status online
-//           var answer = changeStatus(1);
-//           if(answer == '1')
-//           {
-//             var status2 = document.getElementById('status2');
-//             status2.style.display = "none";
-//             document.getElementById('status1').style.display = "block";
-          
-//           }
-//           else
-//           {
-//             var status2 = document.getElementById('status2');
-//             status2.style.display = "block";
-//             document.getElementById('status1').style.display = "none";
-
-//           }
-        
-
-//         } 
-//         else {
-//            // Set status offline
-//             var answer = changeStatus(0);
-//             if(answer == '1')
-//           {
-//             var status2 = document.getElementById('status2');
-//             status2.style.display = "block";
-//             document.getElementById('status1').style.display = "none";
-          
-//           }
-//           else
-//           {
-//             var status2 = document.getElementById('status2');
-//             status2.style.display = "none";
-//             document.getElementById('status1').style.display = "block";
-//           }
-           
-        
-//         }
-//       });
-
-      
-      function changeStatus(status)
+   function changeStatus(status)
       {
         var data = {
             'name': name,
             'status': status
         };
        $.ajax({
-            url:  '/changeStatus',
+            url:  getBaseURL()+'/changeStatus',
             type: "POST",
             dataType: "json",
             data: JSON.stringify(data),
@@ -1053,8 +1030,8 @@ function loadMessages(senderId,receiverId)
             'message': data.message,
             'time':time
         };
-       return fetch('/getMessageStatus',{
-           method:"POST",
+       return fetch(getBaseURL()+'/getMessageStatus',{
+         method:"POST",
            body:JSON.stringify(data),
            headers:{
             'Content-Type' :'application/json',

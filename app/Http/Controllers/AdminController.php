@@ -96,7 +96,11 @@ class AdminController extends Controller
 
     public function export() 
     {
-          return Excel::download(new UsersExport, 'invoices.xlsx');
+        // return \Maatwebsite\Excel\Excel::download(new UsersExport,'invoices.xlsx' );
+          return Excel::download(new UsersExport, 'invoices.HTML');
+        // return Excel::CSV->download(new UsersExport, 'invoices.csv');
+        // return (new UsersExport)->download('invoices.csv', \Maatwebsite\Excel\Excel::CSV);
+    
     }
 
     public function plotChart()

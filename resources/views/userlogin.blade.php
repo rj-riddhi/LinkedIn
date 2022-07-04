@@ -64,15 +64,88 @@
 										<button type="submit" name="submit" class="btn sub_btn  btn-rounded">Login</button>
 									</div>
 									<div class="col-12 mt-2">
-										<p class="text-center"><span> <a class="forgot-password" href="/ForgotModal" >Forgot password?</a></span></p>
+										<p class="text-center"><span> <a class="forgot-password" id="ForgotPassword" href="#" data-toggle="modal" data-target="#ForgotModal">Forgot password?</a></span></p>
 										<p class="text-center p"><span class="span"> Don't have an account?<a href="/Login" title=""> Create one account</a></span></p>
 									</div>
 									
 								</div>
+
+								
+
+
+								<div class="container">
+<div class="social ">
+  <a href="/google-redirect" id="share-gp" class="sharer button"><i class="fa fa-3x fa-google-plus-square"></i></a>
+  <a href="#" id="share-fb" class="sharer button"><i class="fa fa-3x fa-facebook-square"></i></a>
+  <a href="#" id="share-tw" class="sharer button"><i class="fa fa-3x fa-twitter-square"></i></a>
+  <a href="#" id="share-li" class="sharer button"><i class="fa fa-3x fa-linkedin-square"></i></a>
+  <a href="#" id="share-gp" class="sharer button"><i class="fa fa-3x fa-github-square"></i></a>
+  </div>
+  
+</div>
+								
+
 								
 							</form>
 
 
 </div>
+
+
+		<!-- Forgot pass model -->
+
+		<div class="modal fade" id="ForgotModal">
+			<div class="modal-dialog" role="document"  style="overflow-y: hidden">
+				<div class="modal-content">
+				@if (Session::has('message'))
+	
+				<div class="alert alert-info">{{ Session::get('message') }}</div>
+@endif
+					<div class="modal-body mb-0 pb-0 mt-0">
+						<div class="container ">
+							
+							<div class="row">
+								<div class="col-auto"><h1 class="h1">Forgot Password</h1></div>
+								<div class="col"><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+							</div>
+							<form method="post" action='/ResetPassword'>
+								@csrf
+    						<input type="hidden" name="type" value="send" >
+								<div class="form-row" style="border-style: none;">
+									<div class="form-group col-12">
+										<input type="email" name="Email" class="form-control  user" placeholder="Email" required>
+									</div>
+									
+									<div class="col-12 text-center">
+										<button type="submit" name="submit" class="btn book_btn" id="sendbtn">Send</button>
+									</div>
+									<script>
+										function changeinnerHTML(){
+											document.getElementById("sendbtn").innerHTML = "Loading...";
+										}
+									</script>
+									<div class="col-12 mt-2">
+										
+										<p class="text-center p"><span class="span"><a class="login-now" href="#" data-toggle="modal" data-target="#LoginModal" data-dismiss="modal">Login now</a></span></p>
+									</div>
+									
+								</div>
+								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Forgot pass model end -->
+
+		@if (Session::has('message'))
+	<script>
+		var element = document.getElementById('ForgotPassword');
+		element.click();
+		</script>
+   @endif
+
+		@include('jsLinks')
 </body>
 </html>

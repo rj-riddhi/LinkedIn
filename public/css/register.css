@@ -78,5 +78,35 @@ span{
   #profileImage{
 	  display:none;
   }
- 
+
+  /* .socialits{
+	padding:0.9rem;
+	max-width:10%;
+	box-shadow: 0px 0px 9px #00000059;
+	background-color: #1D7A8C;
+	border-radius: 45%;
+ }
+  .socialits:hover{
+	background-color: white;
+  }
+  .fab{
+	color:#FFFFFF;
+  }
+  .socialits .fab:hover{
+	color:#1D7A8C;
+  } */
+
+  .social a {
+	padding: 0 .5em;
+	color:#1D7A8C;
+	
+  }
+  .social a:hover {
+	color:#4F4F4F;
+	
+  }
+  
+ .social{
+	margin-left:25%;
+}
   

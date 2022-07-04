@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 // const upload = require('express-fileupload');
 
 const multer = require('multer');
+const { Console } = require('console');
 // const { promise } = require('bcrypt/promises');
 // const { resolve } = require('path');
 // const { reject } = require('lodash');
@@ -19,7 +20,7 @@ const multer = require('multer');
 // const bcrypt = require('bcrypt');
 
 app.use(require('cors')());
-const PORT = process.env.PORT || 8000 ;
+const PORT = process.env.PORT || 3000 ;
 
 http.listen(PORT,()=>{
     console.log(`Listning on ${PORT}`);
@@ -147,8 +148,7 @@ app.get('/welcome/:name', function(req, res) {
 })
 
 app.post('/getMessageStatus',async(req,res)=>{
-  
-var status = await insertMsgtoDatabase(req.body);
+ var status = await insertMsgtoDatabase(req.body);
 res.send(`${status}`);
 });
  
@@ -176,6 +176,28 @@ io.on('connection' , (socket)=>{
 
 async function insertMsgtoDatabase(msg)
 {
+  
+//  var data =   axios({
+//     method: "POST",
+//     data:JSON.stringify(msg),
+//     withCredentials: true,
+//     url: "http://localhost:8000/api/insertMsgToDatabase",
+//   });
+//   console.log(data);
+  // return fetch("/api/insertMsgToDatabase",{
+  //   method:'POST',
+  //   body : JSON.stringify(data),
+  //   headers:{
+  //     'Content-Type' :'application/json',
+  //    }
+  // })
+  // .then((response)=>response.json())
+  //      .then((data)=>{
+  //         return data;
+  //      })
+  //      .catch((error)=>{
+  //          console.log(error);
+  //      });
   return new Promise((resolve,reject) => {
     pool.getConnection(function (err, connection) {
       if (err) throw err;

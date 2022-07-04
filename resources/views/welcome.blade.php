@@ -84,6 +84,10 @@
       <li class="nav-item">
         <a class="nav-link" href="/connections/{{$name}}">Connections</a>
       </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/stripe">Payment</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
       </li>
@@ -95,6 +99,14 @@
         <img src="https://tse4.mm.bing.net/th?id=OIP.FPjQ2OolWgNHEDLXkIf98AHaF2&pid=Api&P=0&w=195&h=154" />
         <br>
        <h1> Welcome {{ $name }} to your Dashboard! </h1>
+
+       @if (Session::has('success'))
+       
+                     <div class="alert alert-success text-center">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <p>{{ Session::get('success') }}</p>
+                     </div>
+                     @endif
     </div>
 </div>
 
@@ -186,9 +198,9 @@
                 </td>
                 <td></td>
                 <?php 
-                $tech =  json_decode($arr->technologies)?>
+                $tech =  json_decode($arr->technologies);
+                ?>
                 <td>
-                    
                 @foreach($tech as $data)
                 {{$data }}
                 @endforeach

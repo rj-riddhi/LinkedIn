@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Support\Arr;
 use App\Models\Usermodel;
 use App\Models\Connection;
 use App\Models\Message;
@@ -11,6 +10,9 @@ use App\Models\Admin_notification;
 use Illuminate\Support\Facades\DB;
 use App\Http\helpers;
 use App\Http\Controllers\MailController;
+use Laravel\Socialite\Facades\Socialite;
+use Session;
+use Stripe;
 		
 
 class UserController extends Controller
@@ -210,7 +212,7 @@ class UserController extends Controller
     	$data =  Usermodel::where('id','!=',$id)
 		                   ->where('role','!=','1')
 						   ->get();
-		return ($data);
+					return ($data);
     }
 	public static function getUserId($name)
 	{
@@ -401,6 +403,71 @@ class UserController extends Controller
 			return json_encode(array("messages"=>$Messages));
 		}
 		}
+
+
+		// Use laarvel Socialits (Google)
+
+		public function googleRedirect()
+{
+    return Socialite::driver('google')->redirect();
+}
+
+public function googleCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+        } catch (Exception $e) {
+			
+            return redirect('/');
+        }
+		// check if they're an existing user
+        $existing = Usermodel::where('email', $user->email)->first();
+		
+        if ($existing) {
+			Usermodel::where('email',$existing['email'])
+				           ->update(['Status'=>'1']);
+				session()->put('UsersName', $existing['name']);
+				session()->put('Id', $existing['id']);
+				session()->put('email',  $existing['email']);
+				session()->put('role',$existing['usertype']);
+
+				date_default_timezone_set('Asia/Kolkata');
+		        $date =  date('Y-m-d H:i:s');
+				$notification = new Admin_notification;
+			$notification->notification = session()->get('UsersName')." is Online";
+			$notification->time = $date;
+			$notification->save();
+				return redirect('/');
+        }
+		else{
+			$html =  "No user found";
+				return view("/userlogin",['error'=>$html,'Email'=>""]);
+			}
+    }
+
+	// Payment Gateway
+
+	public function stripe()
+    {
+        return view('stripe');
+    }
+   
+
+	public function stripePost(Request $request)
+    {
+\Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+\Stripe\PaymentIntent::create([
+  'amount' => 1099,
+  'currency' => 'inr',
+  'payment_method_types' => ['card'],
+]);
+
+        
+        Session::flash('success', 'Payment successful!');
+           
+        return redirect("/");
+    }
 		
 
 	

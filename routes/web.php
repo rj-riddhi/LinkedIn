@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +40,6 @@ Route::view('/Login','Login');
 
 Route::get('/logout',[UserController::class,"logout"]);
 Route::view('/userlogin','userlogin');
-Route::view('/ForgotModal','ForgotPassword');
 Route::get('/welcome/{data}',function ($data) {
     return view('welcome',['name'=>$data]);
 });
@@ -87,3 +88,22 @@ Route::get('/chatLogs',[AdminController::class,'chatLogs']);
 
 Route::get('/activities',[AdminController::class,'activities']);
 
+// Use laarvel socialites
+// For google authentication
+
+Route::get('/google-redirect', [UserController::class, 'googleRedirect']);
+Route::get('/callback', [UserController::class, 'googleCallback']);
+
+// Stripe Payment Gateway
+
+
+Route::get('stripe', [UserController::class, 'stripe']);
+Route::post('stripe', [UserController::class, 'stripePost'])->name('stripe.post');
+
+
+// ResetPassword
+Route::post("/ResetPassword",[ResetPasswordController::class,'index']);
+Route::get("/create-new-password/{selector}/{validator}",function($selector,$validator){
+    return view('create-new-password',['selector'=>$selector,'validator'=>$validator]);
+});
+Route::post("/ResetPasswords",[ResetPasswordController::class,'ResetPasswords']);
